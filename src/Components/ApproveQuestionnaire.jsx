@@ -19,7 +19,10 @@ const ApproveQuestionnaire = () => {
         try {
           const apiUrl = "/api/setting/getAnsweredQuestionnaire";
           const response = await fetch(apiUrl, {
-            cache : 'no-store',
+             headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
           });
       
@@ -40,7 +43,10 @@ const ApproveQuestionnaire = () => {
         try {
           const apiUrl = `/api/setting/approveOnm/${id}`;
           const response = await fetch(apiUrl, {
-            cache : 'no-store',
+             headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
           });
       

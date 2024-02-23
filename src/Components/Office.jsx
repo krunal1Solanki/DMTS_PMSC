@@ -70,7 +70,10 @@ const Office = () => {
         try {
           const apiUrl = '/api/setting/getOffice';
           const response = await fetch(apiUrl, {
-            cache : 'no-store',
+             headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
           });
       
@@ -104,7 +107,10 @@ const Office = () => {
             const apiUrl = '/api/setting/addOffice';
             const response = await fetch(apiUrl, {
               method: 'POST',
-              cache : 'no-store',
+               headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
               body: JSON.stringify(formData),
             });
@@ -176,7 +182,10 @@ const Office = () => {
             const apiUrl = '/api/setting/editOffice';
             const response = await fetch(apiUrl, {
               method: 'POST',
-              cache : 'no-store',
+               headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
               body: JSON.stringify(formData),
             });
@@ -238,7 +247,10 @@ const Office = () => {
           const apiUrl = `/api/setting/deleteOffice`;
           await fetch(apiUrl, {
             method: 'POST',
-            cache : 'no-store',
+             headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
             body: JSON.stringify({ officeId }),
           });
       

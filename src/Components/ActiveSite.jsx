@@ -33,7 +33,10 @@ const ActiveSite = () => {
         try {
           const apiUrl = "/api/sites/getAllSites";
           const response = await fetch(apiUrl, {
-            cache : 'no-store',
+             headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
           });
       
@@ -67,7 +70,10 @@ const ActiveSite = () => {
           const apiUrl = "/api/sites/siteStatus";
           await fetch(apiUrl, {
             method: 'POST',
-            cache : 'no-store',
+             headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
             body: JSON.stringify({
               _id: id,

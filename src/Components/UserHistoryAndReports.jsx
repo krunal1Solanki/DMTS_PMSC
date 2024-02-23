@@ -22,7 +22,10 @@ const UserHistoryAndReports = () => {
     try {
       const apiUrl = '/api/sites/getUserSiteHistoryReport';
       const response = await fetch(apiUrl, {
-        next : {revalidate : 1}
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
       });
   
       if (!response.ok) {

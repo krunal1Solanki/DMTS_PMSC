@@ -70,7 +70,10 @@ const CreateGroups = () => {
         try {
           const apiUrl = '/api/sites/getSiteGroups';
           const response = await fetch(apiUrl, {
-            next : {revalidate : 1}
+            headers : {
+                "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+            }
           });
       
           if (!response.ok) {
@@ -164,7 +167,10 @@ const CreateGroups = () => {
                 try {
                     const info = await fetch('/api/sites/assignEmergencyRoute', {
                         method: 'POST',
-                        cache : 'no-store',
+                         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
                         body: JSON.stringify(body),
                       });
@@ -203,7 +209,10 @@ const CreateGroups = () => {
             }
             const info = await fetch('/api/sites/createSiteGroup', {
                 method: 'POST',
-                cache : 'no-store',
+                 headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
                 body: JSON.stringify({
                   groupName,
@@ -253,7 +262,10 @@ const CreateGroups = () => {
         try {
           const apiUrl = '/api/sites/getAllSites';
           const response = await fetch(apiUrl, {
-            cache : 'no-store',
+             headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
           });
       
@@ -282,7 +294,10 @@ const CreateGroups = () => {
         try {
             await fetch(`/api/sites/deleteGroup`, {
                 method: 'POST',
-                cache : 'no-store',
+                 headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
                 body: JSON.stringify({ groupId }),
               });

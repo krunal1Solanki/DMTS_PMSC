@@ -30,7 +30,10 @@ const ImeiApproval = () => {
         try {
           const apiUrl = '/api/user/getUserWithGroups';
           const response = await fetch(apiUrl, {
-        cache : 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
             
           });
       
@@ -72,7 +75,10 @@ const ImeiApproval = () => {
           const apiUrl = '/api/user/approveImei';
           await fetch(apiUrl, {
             method: 'POST',
-            cache : 'no-store',
+             headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
             body: JSON.stringify(body),
           });

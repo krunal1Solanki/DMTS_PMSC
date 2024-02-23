@@ -46,7 +46,10 @@ const QuestionnaireDisplay = () => {
       const apiUrl = '/api/setting/getQuestionnaire';
       const response = await fetch(apiUrl, {
         method: 'GET',
-        cache : 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
       });
     
       if (!response.ok) {
@@ -72,7 +75,10 @@ const QuestionnaireDisplay = () => {
       const apiUrl = '/api/setting/deleteQuestionnaire';
       const response = await fetch(apiUrl, {
         method: 'DELETE',
-        cache : 'no-store',
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
         body: JSON.stringify({ questionnaireId }),
       });
   

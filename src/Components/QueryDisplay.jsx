@@ -69,7 +69,10 @@ const QueryDisplay = () => {
     try {
       const apiUrl = '/api/setting/getQuery';
       const response = await fetch(apiUrl, {
-        cache : 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
       });
     
@@ -128,7 +131,10 @@ const QueryDisplay = () => {
       try {
         await fetch(apiUrl, {
           method: 'POST',
-          cache : 'no-store',
+           headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
           body: JSON.stringify(requestData),
         });

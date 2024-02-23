@@ -27,7 +27,10 @@ const LoginPage = () => {
         try {
             const response = await fetch('/api/user/login', {
                 method: 'POST',
-                cache : 'no-store',
+                 headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
                 body: JSON.stringify({ OperatorName, password }),
               });

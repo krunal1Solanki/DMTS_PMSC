@@ -73,7 +73,10 @@ const AddQuestionnaire = () => {
           const apiUrl = '/api/setting/addQuestionnaire';
           const response = await fetch(apiUrl, {
             method: 'POST',
-            cache : 'no-store',
+             headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
             body: JSON.stringify(questionnaire),
           });

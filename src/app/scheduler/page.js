@@ -34,7 +34,10 @@ const Scheduler = () => {
     try {
       const apiUrl = 'api/project/getProjectSitesAssignedList';
       const response = await fetch(apiUrl, {
-        cache : 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
       });
   

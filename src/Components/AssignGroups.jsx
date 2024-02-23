@@ -36,7 +36,10 @@ const AssignGroups = () => {
     try {
       const apiUrl = '/api/sites/getSiteGroups';
       const response = await fetch(apiUrl, {
-        cache: 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
       });
 
@@ -58,7 +61,10 @@ const AssignGroups = () => {
     try {
       const apiUrl = '/api/user/getUserWithGroups';
       const response = await fetch(apiUrl, {
-        cache: 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
       });
 
@@ -102,7 +108,10 @@ const AssignGroups = () => {
 
       const info = await fetch('/api/sites/assignGroup', {
         method: 'POST',
-        cache: 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
         body: JSON.stringify(payload),
       });
@@ -168,7 +177,10 @@ const AssignGroups = () => {
 
       const info = await fetch('/api/sites/assignGroup', {
         method: 'POST',
-        cache: 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
         body: JSON.stringify(payload),
       });
@@ -235,7 +247,10 @@ const AssignGroups = () => {
 
       const info = await fetch('/api/sites/assignGroup', {
         method: 'POST',
-        cache: 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
         body: JSON.stringify(payload),
       });
@@ -290,7 +305,10 @@ const AssignGroups = () => {
       const apiUrl = '/api/sites/unassignGroup';
       const info = await fetch(apiUrl, {
         method: 'POST',
-        cache: 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
         body: JSON.stringify({ userId, groupId }),
       });

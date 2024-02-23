@@ -74,7 +74,10 @@ const MapDisplay = () => {
       const body = { projectID: selectedProject._id };
       const response = await fetch(apiUrl, {
         method: 'POST',
-               cache : 'no-store',
+                headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
         body: JSON.stringify(body),
       });
@@ -104,7 +107,10 @@ const MapDisplay = () => {
     try {
       const apiUrl = '/api/project/getAllProjects';
       const response = await fetch(apiUrl, {
-        cache : 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
       });
   

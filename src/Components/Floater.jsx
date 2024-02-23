@@ -135,7 +135,10 @@ const Floater = () => {
       formData.append('responsibleUser', JSON.stringify(userCurr));
       const info = await fetch('/api/setting/raiseQuery', {
         method: 'POST',
-        cache : 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
         body: JSON.stringify(formData),
       });
@@ -180,7 +183,10 @@ s
     try {
       const apiUrl = '/api/user/logout';
       await fetch(apiUrl, {
-        cache : 'no-store',
+         headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
 
       });
   
