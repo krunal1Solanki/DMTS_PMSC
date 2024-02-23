@@ -40,31 +40,30 @@ const QuestionnaireDisplay = () => {
     setLOader(false);
   };
 
-  useEffect(() => {
-    const fetchOriginalData = async () => {
-      setLOader(true);
-      try {
-        const apiUrl = '/api/setting/getQuestionnaire';
-        const response = await fetch(apiUrl, {
-          method: 'GET',
-          cache : 'no-store',
-
-        });
-      
-        if (!response.ok) {
-          throw new Error(`Failed to fetch data: ${response.status} - ${response.statusText}`);
-        }
-      
-        const responseData = await response.json();
-        setOriginalQuestionnaires(responseData.message);
-        setQuestionnaires(responseData.message);
-        setLoader(false);
-      } catch (error) {
-        console.error('Error fetching data:', error.message);
+  const fetchOriginalData = async () => {
+    setLOader(true);
+    try {
+      const apiUrl = '/api/setting/getQuestionnaire';
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        cache : 'no-store',
+      });
+    
+      if (!response.ok) {
+        throw new Error(`Failed to fetch data: ${response.status} - ${response.statusText}`);
       }
-      
-    };
-
+    
+      const responseData = await response.json();
+      setOriginalQuestionnaires(responseData.message);
+      setQuestionnaires(responseData.message);
+      setLOader(false);
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+    }
+    
+  };
+  
+  useEffect(() => {
     fetchOriginalData();
   }, []);
 
@@ -78,9 +77,11 @@ const QuestionnaireDisplay = () => {
       });
   
       if (!response.ok) {
+        console.log("IFFFFF")
         console.error(`Error deleting questionnaire: ${response.status} - ${response.statusText}`);
       } else {
-        fetchData(); // Assuming fetchData is a function to refresh data
+        console.log("ELSEEEE")
+        fetchOriginalData() // Assuming fetchData is a function to refresh data
       }
     } catch (error) {
       console.error('Error deleting questionnaire:', error);
