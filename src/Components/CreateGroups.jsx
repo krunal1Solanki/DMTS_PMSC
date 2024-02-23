@@ -52,7 +52,7 @@ const CreateGroups = () => {
 
     useEffect(() => {
         getSites();
-        getSites();
+        getGroups();
     }, []);
 
 
