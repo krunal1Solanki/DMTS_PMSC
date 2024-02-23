@@ -41,9 +41,9 @@ const LoginPage = () => {
               // Use responseData as needed
               
             
-            if (response.data.message == 'User found!') {
+            if (responseData.message == 'User found!') {
                 router.push('/')
-                dispatch(logIn(response.data.user))
+                dispatch(logIn(responseData.user))
                 toast({
                     title: 'Login Successful',
                     status: 'success',
@@ -53,7 +53,7 @@ const LoginPage = () => {
                 });
             } else {
                 toast({
-                    title: response.data.message,
+                    title: responseData.message,
                     status: 'error',
                     duration: 3000,
                     isClosable: true,
