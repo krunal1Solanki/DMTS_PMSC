@@ -7,7 +7,7 @@ import { DeleteFilled } from '@ant-design/icons';
 import axios from 'axios';
 import { Table, Space } from 'antd';
 import Loader from "./LOader"
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 const { Option } = Select;
 
 const AssignGroups = () => {
@@ -32,18 +32,18 @@ const AssignGroups = () => {
 
   const getGroups = async () => {
     setLoaders(true);
-  
+
     try {
       const apiUrl = '/api/sites/getSiteGroups';
       const response = await fetch(apiUrl, {
-        cache : 'no-store',
+        cache: 'no-store',
 
       });
-  
+
       if (!response.ok) {
         throw new Error(`Failed to fetch site groups: ${response.status} - ${response.statusText}`);
       }
-  
+
       const responseData = await response.json();
       setGroups(responseData.message);
       setLoaders(false);
@@ -51,28 +51,28 @@ const AssignGroups = () => {
       console.error('Error fetching site groups:', error.message);
     }
   };
-  
+
 
 
   const getUsers = async () => {
     try {
       const apiUrl = '/api/user/getUserWithGroups';
       const response = await fetch(apiUrl, {
-        cache : 'no-store',
+        cache: 'no-store',
 
       });
-  
+
       if (!response.ok) {
         throw new Error(`Failed to fetch users: ${response.status} - ${response.statusText}`);
       }
-  
+
       const responseData = await response.json();
       setUsers(responseData.message);
     } catch (error) {
       console.error('Error fetching users:', error.message);
     }
   };
-  
+
 
 
   const handleAssignSite = (user) => {
@@ -102,19 +102,19 @@ const AssignGroups = () => {
 
       const info = await fetch('/api/sites/assignGroup', {
         method: 'POST',
-               cache : 'no-store',
+        cache: 'no-store',
 
         body: JSON.stringify(payload),
       });
-      
+
       if (!info.ok) {
         throw new Error(`Failed to assign group: ${info.status} - ${info.statusText}`);
       }
-      
+
       const responseData = await info.json();
       // Use responseData as needed
-      
-      if (info.data.message == 'Some Groups Are Already Assigned')
+
+      if (responseData.message == 'Some Groups Are Already Assigned')
         toast({
           title: 'Whoops!',
           position: 'top-right',
@@ -168,19 +168,19 @@ const AssignGroups = () => {
 
       const info = await fetch('/api/sites/assignGroup', {
         method: 'POST',
-               cache : 'no-store',
+        cache: 'no-store',
 
         body: JSON.stringify(payload),
       });
-      
+
       if (!info.ok) {
         throw new Error(`Failed to assign group: ${info.status} - ${info.statusText}`);
       }
-      
+
       const responseData = await info.json();
       // Use responseData as needed
-      
-      if (info.data.message == 'Some Groups Are Already Assigned')
+
+      if (responseData.message == 'Some Groups Are Already Assigned')
         toast({
           title: 'Whoops!',
           position: 'top-right',
@@ -225,7 +225,7 @@ const AssignGroups = () => {
       const data = currGroups.map((groupId) => ({
         groupId,
         groupName: groups.find((item) => item._id === groupId)?.groupName || '',
-        isPreventive : true
+        isPreventive: true
       }));
 
       const payload = {
@@ -235,19 +235,19 @@ const AssignGroups = () => {
 
       const info = await fetch('/api/sites/assignGroup', {
         method: 'POST',
-               cache : 'no-store',
+        cache: 'no-store',
 
         body: JSON.stringify(payload),
       });
-      
+
       if (!info.ok) {
         throw new Error(`Failed to assign group: ${info.status} - ${info.statusText}`);
       }
-      
+
       const responseData = await info.json();
       // Use responseData as needed
-      
-      if (info.data.message == 'Some Groups Are Already Assigned')
+
+      if (responseData.message == 'Some Groups Are Already Assigned')
         toast({
           title: 'Whoops!',
           position: 'top-right',
@@ -290,15 +290,15 @@ const AssignGroups = () => {
       const apiUrl = '/api/sites/unassignGroup';
       const info = await fetch(apiUrl, {
         method: 'POST',
-               cache : 'no-store',
+        cache: 'no-store',
 
         body: JSON.stringify({ userId, groupId }),
       });
-  
+
       if (!info.ok) {
         throw new Error(`Failed to unassign group: ${info.status} - ${info.statusText}`);
       }
-  
+
       toast({
         title: 'Success!',
         description: 'Group has been deleted successfully',
@@ -306,7 +306,7 @@ const AssignGroups = () => {
         status: 'success',
         duration: '3000',
       });
-  
+
       getUsers();
     } catch (error) {
       toast({
@@ -316,11 +316,11 @@ const AssignGroups = () => {
         status: 'danger',
         duration: '3000',
       });
-  
+
       console.log('ERROR', error.message);
     }
   };
-  
+
   const showDeleteConfirmation = (userId, groupId) => {
     setDeletingGroup({ userId, groupId });
     setDeleteConfirmationVisible(true);
@@ -363,7 +363,7 @@ const AssignGroups = () => {
               <Button
                 size="sm"
                 variant="solid"
-                colorScheme={!group.isPreventive  ? "teal" : "blue"}
+                colorScheme={!group.isPreventive ? "teal" : "blue"}
                 onClick={() => showDeleteConfirmation(record._id, group.groupId)}
               >
                 {`${group.groupName}${group.isPreventive ? "(P)" : ""}`}
@@ -409,7 +409,7 @@ const AssignGroups = () => {
             value={preventiveGroups[record._id]}
             onChange={(selectedValues) => setPreventiveGroups({ ...selectedGroups, [record._id]: selectedValues })}
           >
-            {groups.filter((item)=> item.sites.length != 1).map((group) => (
+            {groups.filter((item) => item.sites.length != 1).map((group) => (
               <Option key={group._id} value={group._id}>
                 {group.groupName}
               </Option>
@@ -432,9 +432,9 @@ const AssignGroups = () => {
             value={singleSite[record._id]}
             onChange={(selectedValues) => setSingleSite({ ...selectedGroups, [record._id]: selectedValues })}
           >
-            {groups.filter((item)=> item.sites.length == 1).map((group) => (
+            {groups.filter((item) => item.sites.length == 1).map((group) => (
               <Option key={group._id} value={group._id}>
-                {console.log("GROUPD",group)}
+                {console.log("GROUPD", group)}
                 {group.groupName}
               </Option>
             ))}
@@ -481,4 +481,4 @@ const AssignGroups = () => {
   );
 };
 
-export default AssignGroups ;
+export default AssignGroups;
