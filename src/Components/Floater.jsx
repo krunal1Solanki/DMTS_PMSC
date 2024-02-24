@@ -133,23 +133,9 @@ const Floater = () => {
 
       const userCurr = { name: authReducer.value.user.OperatorName, _id: authReducer.value.user._id };
       formData.append('responsibleUser', JSON.stringify(userCurr));
-      const info = await fetch('/api/setting/raiseQuery', {
-        method: 'POST',
-         headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache",
-        },
-
-        body: JSON.stringify(formData),
-      });
+      const info = await axios.post('/api/setting/raiseQuery', formData);
       
-      if (!info.ok) {
-        throw new Error(`Failed to raise query: ${info.status} - ${info.statusText}`);
-      }
-      
-      const responseData = await info.json();
       // Use responseData as needed
-s      
 
       toast({
         title: "Query Submitted",

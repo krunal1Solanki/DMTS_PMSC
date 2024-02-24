@@ -1,11 +1,11 @@
-import { connect } from "../../../../dbConfig/dbConfig"
-import queryModel from '@/models/queryMaster'
-import { NextRequest, NextResponse } from "next/server"
-import { writeFile } from 'fs/promises'
-import { join } from 'path'
+import { connect } from "../../../../dbConfig/dbConfig";
+import queryModel from '@/models/queryMaster';
+import { NextRequest, NextResponse } from "next/server";
+import { writeFile, mkdir } from 'fs/promises';
+import { join, dirname } from 'path';
 import { readFile } from "fs";
 
-connect()
+connect();
 
 export async function POST(request: NextRequest) {
     try {
@@ -33,10 +33,13 @@ export async function POST(request: NextRequest) {
             const buffer = Buffer.from(bytes);
 
             //@ts-ignore
-            const relativePath = join('images', `${timestamp}_${file.name}`);
+            const relativePath = join('..', 'images', `${timestamp}_${file.name}`);
             
             // Specify the absolute path
             const absolutePath = join(process.cwd(), 'public', relativePath);
+
+            // Create the directory if it doesn't exist
+            await mkdir(dirname(absolutePath), { recursive: true });
             
             await writeFile(absolutePath, buffer);
             attachments = absolutePath; // Assign the absolute path if file is present
@@ -61,10 +64,11 @@ export async function POST(request: NextRequest) {
             message: "Query Raised Successfully"
         });
     } catch (err: any) {
-        console.log('PP');
+        console.log(err);
         return NextResponse.json({
             error: err.message
         });
     }
 }
+
 export const revalidate = 0;
