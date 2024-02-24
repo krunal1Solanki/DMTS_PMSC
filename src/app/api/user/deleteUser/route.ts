@@ -19,3 +19,4 @@ export async function POST(request: NextRequest,) {
         });
     }
 }
+export const revalidate = 0;

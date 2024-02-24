@@ -45,3 +45,4 @@ export async function GET(request) {
       return NextResponse.notFound('File not found');
     }
   }
+  export const revalidate = 0;

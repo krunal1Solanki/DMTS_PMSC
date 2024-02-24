@@ -20,3 +20,4 @@ export async function GET(request: NextRequest, params: any) {
         })
     }
 }
+export const revalidate = 0;
