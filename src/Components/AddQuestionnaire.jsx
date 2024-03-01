@@ -18,10 +18,6 @@ import {
     Select,
 } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
-import axios from 'axios';
-import Loader from './Loader';
-import QuestionnaireDisplay from './QuestionnaireDisplay';
-
 const AddQuestionnaire = () => {
     const toast = useToast();
     const [questionnaire, setQuestionnaire] = useState({

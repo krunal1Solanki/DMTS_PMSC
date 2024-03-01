@@ -2,8 +2,8 @@ import userModel from "@/models/userModel.js";
 import {connect} from "../../../../dbConfig/dbConfig.js"
 import {NextRequest, NextResponse} from "next/server"
 import userSiteHistoryModel from '@/models/userSiteHistoryModel.js'
-import getDataFromToken from "@/helpers/getDataFromToken.js";
-import sendNotfication from "@/helpers/sendNotification.js";
+import getDataFromToken from "@/helpers/getDataFromToken";
+import sendNotfication from "@/helpers/sendNotification";
 
 connect()
 
