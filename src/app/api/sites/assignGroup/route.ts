@@ -41,7 +41,7 @@ export async function POST (request : NextRequest) {
 
 
         const userData = await getDataFromToken(request);
-        const token = userData.notificationToken;
+        const token = userData.user.notificationToken;
         await sendNotfication(token, "Group Assigned !", 'New group has been assigned please check.')
         return NextResponse.json({
           message: "Groups has been successfully assigned !"
