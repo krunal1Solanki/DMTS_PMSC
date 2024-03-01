@@ -4,6 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 import { readFile } from "fs";
+import userModel from "@/models/userModel";
+import sendNotification from "@/helpers/sendNotification";
 
 connect();
 
@@ -22,7 +24,7 @@ export async function POST(request: NextRequest) {
         //@ts-ignore
         const siteDetails = JSON.parse(body.get("siteDetails"));
         //@ts-ignore
-        const responsibleUser = JSON.parse(body.get("responsibleUser"));
+        const responsibleUser = JSON.parse(body.get("responsibleUser"))
 
         const timestamp = Date.now();
         let attachments = null; // Initialize attachments to null
@@ -58,6 +60,12 @@ export async function POST(request: NextRequest) {
             complaintPhoneNumber,
             complaintSource
         });
+
+        const user = await userModel.findOne({
+            OperatorName : selectedUser,
+        })
+
+        await sendNotification(user.notificationToken, "Query Found !", "Query has been assinged to you please check!")
 
         console.log(body);
         return NextResponse.json({

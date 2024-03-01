@@ -3,7 +3,8 @@ const Schema = mongoose.Schema
   
 const schema = new Schema({
     OperatorName: {
-        type: String
+        type: String,
+        unique : true
     },
     pmscUserData : Object,
     notificationToken : String,

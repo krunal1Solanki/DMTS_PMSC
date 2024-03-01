@@ -260,7 +260,7 @@ const CreateGroups = () => {
         setGetSitesLOader(true);
       
         try {
-          const apiUrl = '/api/sites/getActiveSites';
+          const apiUrl = '/api/sites/getAllSites';
           const response = await fetch(apiUrl, {
              headers: {
           "Content-Type": "application/json",
@@ -274,7 +274,7 @@ const CreateGroups = () => {
           }
       
           const responseData = await response.json();
-          setSites(responseData.sites);
+          setSites(responseData.message);
           setGetSitesLOader(false);
         } catch (error) {
           console.error('Error fetching sites:', error.message);

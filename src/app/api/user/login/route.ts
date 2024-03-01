@@ -1,7 +1,7 @@
 import userModel from "@/models/userModel";
 import { connect } from "../../../../dbConfig/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
-import  bcryptjs from 'bcryptjs'
+import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken';
 import checkingStatusModel from "@/models/checkingStatusModel";
 import { isErrored } from "stream";
@@ -14,32 +14,30 @@ export async function POST(request: NextRequest,) {
         //imeiPMSC, imeiPMSCApproved
         // no, no,
         // 
-        const user = await userModel.findOne({"pmscUserData.employeeId" : OperatorName });
-        if(!user.notificationToken) {
-            await userModel.findOneAndUpdate(
-                { "pmscUserData.employeeId": OperatorName },
-                { $set: { notificationToken} },
-              )
-        }
+        const user = await userModel.findOne({ "pmscUserData.employeeId": OperatorName });
+        await userModel.findOneAndUpdate(
+            { "pmscUserData.employeeId": OperatorName },
+            { $set: { notificationToken } },
+        )
 
-        const info = await checkingStatusModel.find({userId : user._id}).sort({creationDate : -1}).limit(1);
+        const info = await checkingStatusModel.find({ userId: user._id }).sort({ creationDate: -1 }).limit(1);
 
-        if(imeiNumber) {
+        if (imeiNumber) {
             const imei = user.imeiPMSC;
             const imeiPMSCApproved = user.imeiPMSCApproved;
-            if(!imei || (imei && imei != imeiNumber && imeiPMSCApproved)) {
-                user.imeiPMSC =  imeiNumber;
+            if (!imei || (imei && imei != imeiNumber && imeiPMSCApproved)) {
+                user.imeiPMSC = imeiNumber;
                 await user.save();
                 return NextResponse.json({
-                    message : "IMEI in under approval",
+                    message: "IMEI in under approval",
                 })
             }
-            if(imei && !imeiPMSCApproved) {
+            if (imei && !imeiPMSCApproved) {
                 return NextResponse.json({
-                    message : "IMEI is not approved yet",
+                    message: "IMEI is not approved yet",
                 })
             }
-         }
+        }
 
         if (!user) return NextResponse.json({
             message: "User not found!"
@@ -52,26 +50,26 @@ export async function POST(request: NextRequest,) {
         });
 
         const newUser = {
-            id : user._id,
-            OperatorName : user.OperatorName,
-            Designation : user.Designation,
-            EmploymentType : user.EmploymentType,
-            MobileNo : user.MobileNo,
-            Password : user.Password,
-            pmscUserData : user.pmscUserData,
+            id: user._id,
+            OperatorName: user.OperatorName,
+            Designation: user.Designation,
+            EmploymentType: user.EmploymentType,
+            MobileNo: user.MobileNo,
+            Password: user.Password,
+            pmscUserData: user.pmscUserData,
         };
-        
+
         console.log("BEFORE", newUser)
-        const token = jwt.sign({ user : newUser }, 'PIKACHU', { expiresIn: '1h' });
+        const token = jwt.sign({ user: newUser }, 'PIKACHU', { expiresIn: '1h' });
 
         const response = NextResponse.json({
             message: "User found!",
             user,
             info
         });
-        
+
         console.log("TOKEN", token)
-        response.cookies.set("token", token, {httpOnly : true});
+        response.cookies.set("token", token, { httpOnly: true });
 
         return response;
     } catch (err: any) {
