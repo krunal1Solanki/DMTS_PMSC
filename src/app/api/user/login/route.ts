@@ -10,7 +10,7 @@ connect();
 
 export async function POST(request: NextRequest,) {
     try {
-        const { OperatorName, password, imeiNumber } = await request.json();
+        const { OperatorName, password, imeiNumber, notificationToken } = await request.json();
         //imeiPMSC, imeiPMSCApproved
         // no, no,
         // 
@@ -53,7 +53,8 @@ export async function POST(request: NextRequest,) {
             EmploymentType : user.EmploymentType,
             MobileNo : user.MobileNo,
             Password : user.Password,
-            pmscUserData : user.pmscUserData
+            pmscUserData : user.pmscUserData,
+            notificationToken : notificationToken ? notificationToken : ""
         };
         
         console.log("BEFORE", newUser)
