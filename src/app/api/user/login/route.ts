@@ -15,7 +15,12 @@ export async function POST(request: NextRequest,) {
         // no, no,
         // 
         const user = await userModel.findOne({"pmscUserData.employeeId" : OperatorName });
-        console.log({ user });
+        if(!user.notificationToken) {
+            await userModel.findOneAndUpdate(
+                { "pmscUserData.employeeId": OperatorName },
+                { $set: { notificationToken} },
+              )
+        }
 
         const info = await checkingStatusModel.find({userId : user._id}).sort({creationDate : -1}).limit(1);
 
@@ -54,7 +59,6 @@ export async function POST(request: NextRequest,) {
             MobileNo : user.MobileNo,
             Password : user.Password,
             pmscUserData : user.pmscUserData,
-            notificationToken : notificationToken ? notificationToken : ''
         };
         
         console.log("BEFORE", newUser)

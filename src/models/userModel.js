@@ -6,6 +6,7 @@ const schema = new Schema({
         type: String
     },
     pmscUserData : Object,
+    notificationToken : String,
     isPMSCUser: Boolean,
     employeeId : {
         type: Number,
