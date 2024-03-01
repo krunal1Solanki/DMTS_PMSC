@@ -2,6 +2,9 @@ import userModel from "@/models/userModel.js";
 import {connect} from "../../../../dbConfig/dbConfig.js"
 import {NextRequest, NextResponse} from "next/server"
 import userSiteHistoryModel from '@/models/userSiteHistoryModel.js'
+import getDataFromToken from "@/helpers/getDataFromToken.js";
+import sendNotfication from "@/helpers/sendNotification.js";
+
 connect()
 
 ;
@@ -35,6 +38,11 @@ export async function POST (request : NextRequest) {
                 groupName : groups[i].groupName,
             })
         }
+
+
+        const userData = await getDataFromToken(request);
+        const token = userData.notificationToken;
+        await sendNotfication(token, "Group Assigned !", 'New group has been assigned please check.')
         return NextResponse.json({
           message: "Groups has been successfully assigned !"
         });
