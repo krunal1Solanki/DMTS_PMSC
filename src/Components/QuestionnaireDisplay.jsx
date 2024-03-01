@@ -13,7 +13,7 @@ import {
   Divider,
 } from '@chakra-ui/react';
 import { DeleteIcon, SearchIcon } from '@chakra-ui/icons';
-import Loader from './Loader';
+import Loader from './LOader';
 
 const QuestionnaireDisplay = () => {
   const [questionnaires, setQuestionnaires] = useState([]);

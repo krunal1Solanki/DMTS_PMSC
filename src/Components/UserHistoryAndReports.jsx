@@ -5,7 +5,7 @@ import { Table } from 'antd';
 import { DownloadIcon } from '@chakra-ui/icons'; // Import the DownloadIcon
 import axios from 'axios';
 import * as XLSX from 'xlsx'; // Import the XLSX library for Excel export
-import Loader from './Loader';
+import Loader from './LOader';
 
 
 const UserHistoryAndReports = () => {
