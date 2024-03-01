@@ -1,8 +1,9 @@
 import { connect } from "../../../../dbConfig/dbConfig";
 import questionnaireMaster from '@/models/questionnaireMaster';
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile } from 'fs/promises';
-import { join, extname } from 'path';
+import { writeFile , mkdir} from 'fs/promises';
+import { join, dirname } from 'path';
+
 
 connect();
 
@@ -18,27 +19,27 @@ export async function POST(request: NextRequest) {
             for (let i = 0; i < images.length; i++) {
                 const file = images[i].answer;
                 const imageName = images[i].imageName;
-
+                console.log("FILE", file, "FILE")
+                const timestamp = Date.now();
+        
                 // Decode base64 string to buffer
                 const buffer = Buffer.from(file, 'base64');
-
-                const timestamp = Date.now();
-                const fileExtension = extname(imageName) || '.png'; // Get the file extension or default to .png
-
-                // Sanitize the filename and append the extension
-                const sanitizedFileName = `${timestamp}_IMAGE${fileExtension}`;
-
-                const relativePath = join('images', sanitizedFileName);
                 
+                //@ts-ignore
+                const relativePath = join('..', 'images', `${timestamp}_${imageName}`);
+                
+                // Specify the absolute path
                 const absolutePath = join(process.cwd(), 'public', relativePath);
-
+        
+                // Create the directory if it doesn't exist
+                await mkdir(dirname(absolutePath), { recursive: true });
+                
                 await writeFile(absolutePath, buffer);
-                console.log(absolutePath);
-
+        
                 images[i].answer = absolutePath; // Store relative path in the database
             }
         }
-
+        
         const info = new questionnaireMaster({
             type, userId, userName, formType, questionnaireName, questions, images
     });

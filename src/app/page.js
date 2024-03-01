@@ -3,7 +3,7 @@
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
 import axios from 'axios';
 import { Box, Button, Select } from '@chakra-ui/react';
-import Loader from "../Components/LOader"
+import Loader from "../Components/Loader"
 import { useRouter } from 'next/navigation';
 import {getUsers} from '@/redux/features/users-slice'
 import { useDispatch, useSelector } from 'react-redux';

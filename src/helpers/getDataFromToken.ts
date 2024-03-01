@@ -11,4 +11,5 @@ const getDataFromToken = (request: NextRequest) => {
     }
 };
 
+
 export default getDataFromToken

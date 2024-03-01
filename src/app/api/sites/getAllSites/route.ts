@@ -2,13 +2,15 @@ import {connect} from "../../../../dbConfig/dbConfig.js"
 import {NextRequest, NextResponse} from "next/server"
 import siteMaster from "@/models/siteMaster.js"
 import officeModel from "@/models/officeModel.js";
+import getAssignedSites from "@/helpers/getAssignedSites";
 
 connect()
 
 ;
 export async function GET (request : NextRequest) {
     try {
-        let info = await siteMaster.find();
+        let info = await getAssignedSites(request);
+
         const moreInfo = await officeModel.find();
         const modifiedInfo = moreInfo.map((item : any) => {
             item.pumpName = item.name

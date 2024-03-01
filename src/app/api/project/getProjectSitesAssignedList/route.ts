@@ -40,7 +40,7 @@ export async function GET(request: NextRequest, params: any) {
                 projectQuery.then(async (project: any) => {
                     return {
                         project,
-                        sites: await siteMaster.find({ _id: { $in: siteIds } }).lean().exec(),
+                        sites: await siteMaster.find({ _id: { $in: siteIds }, isDMTSActive : true }).lean().exec(),
                     };
                 })
             );

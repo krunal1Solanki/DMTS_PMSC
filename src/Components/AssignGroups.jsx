@@ -4,9 +4,8 @@ import { Card, CardHeader, CardBody, Heading, Button } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
 import { Select, Modal } from 'antd';
 import { DeleteFilled } from '@ant-design/icons';
-import axios from 'axios';
 import { Table, Space } from 'antd';
-import Loader from "./LOader"
+import Loader from "./Loader";
 import { useDispatch } from 'react-redux';
 const { Option } = Select;
 
@@ -22,25 +21,32 @@ const AssignGroups = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteConfirmationVisible, setDeleteConfirmationVisible] = useState(false);
   const [deletingGroup, setDeletingGroup] = useState(null);
-  const [Loaders, setLoaders] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getGroups();
-    getUsers();
+    fetchData();
   }, []);
 
-  const getGroups = async () => {
-    setLoaders(true);
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      await Promise.all([getGroups(), getUsers()]);
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  const getGroups = async () => {
     try {
       const apiUrl = '/api/sites/getSiteGroups';
       const response = await fetch(apiUrl, {
-         headers: {
+        headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
         },
-
       });
 
       if (!response.ok) {
@@ -49,23 +55,19 @@ const AssignGroups = () => {
 
       const responseData = await response.json();
       setGroups(responseData.message);
-      setLoaders(false);
     } catch (error) {
       console.error('Error fetching site groups:', error.message);
     }
   };
 
-
-
   const getUsers = async () => {
     try {
       const apiUrl = '/api/user/getUserWithGroups';
       const response = await fetch(apiUrl, {
-         headers: {
+        headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
         },
-
       });
 
       if (!response.ok) {
@@ -79,21 +81,7 @@ const AssignGroups = () => {
     }
   };
 
-
-
-  const handleAssignSite = (user) => {
-    setSelectedUser(user);
-    setIsModalOpen(true);
-  };
-
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-    setSelectedUser(null);
-    setSelectedGroups({});
-  };
-
   const assignSingle = async (record, preventive) => {
-
     try {
       const currGroups = singleSite[record._id] || [];
       const data = currGroups.map((groupId) => ({
@@ -108,11 +96,10 @@ const AssignGroups = () => {
 
       const info = await fetch('/api/sites/assignGroup', {
         method: 'POST',
-         headers: {
+        headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
         },
-
         body: JSON.stringify(payload),
       });
 
@@ -121,7 +108,6 @@ const AssignGroups = () => {
       }
 
       const responseData = await info.json();
-      // Use responseData as needed
 
       if (responseData.message == 'Some Groups Are Already Assigned')
         toast({
@@ -145,8 +131,6 @@ const AssignGroups = () => {
         updatedSelectedGroups[record._id] = [];
         return updatedSelectedGroups;
       });
-
-      console.log('INFOO', info);
     } catch (error) {
       toast({
         title: 'Error occurred',
@@ -162,7 +146,6 @@ const AssignGroups = () => {
   };
 
   const assignGroup = async (record, preventive) => {
-
     try {
       const currGroups = selectedGroups[record._id] || [];
       const data = currGroups.map((groupId) => ({
@@ -177,11 +160,10 @@ const AssignGroups = () => {
 
       const info = await fetch('/api/sites/assignGroup', {
         method: 'POST',
-         headers: {
+        headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
         },
-
         body: JSON.stringify(payload),
       });
 
@@ -190,7 +172,6 @@ const AssignGroups = () => {
       }
 
       const responseData = await info.json();
-      // Use responseData as needed
 
       if (responseData.message == 'Some Groups Are Already Assigned')
         toast({
@@ -214,8 +195,6 @@ const AssignGroups = () => {
         updatedSelectedGroups[record._id] = [];
         return updatedSelectedGroups;
       });
-
-      console.log('INFOO', info);
     } catch (error) {
       toast({
         title: 'Error occurred',
@@ -231,7 +210,6 @@ const AssignGroups = () => {
   };
 
   const assignPreventive = async (record, preventive) => {
-
     try {
       const currGroups = preventiveGroups[record._id] || [];
       const data = currGroups.map((groupId) => ({
@@ -247,11 +225,10 @@ const AssignGroups = () => {
 
       const info = await fetch('/api/sites/assignGroup', {
         method: 'POST',
-         headers: {
+        headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
         },
-
         body: JSON.stringify(payload),
       });
 
@@ -260,7 +237,6 @@ const AssignGroups = () => {
       }
 
       const responseData = await info.json();
-      // Use responseData as needed
 
       if (responseData.message == 'Some Groups Are Already Assigned')
         toast({
@@ -284,8 +260,6 @@ const AssignGroups = () => {
         updatedSelectedGroups[record._id] = [];
         return updatedSelectedGroups;
       });
-
-      console.log('INFOO', info);
     } catch (error) {
       toast({
         title: 'Error occurred',
@@ -305,11 +279,10 @@ const AssignGroups = () => {
       const apiUrl = '/api/sites/unassignGroup';
       const info = await fetch(apiUrl, {
         method: 'POST',
-         headers: {
+        headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
         },
-
         body: JSON.stringify({ userId, groupId }),
       });
 
@@ -417,7 +390,7 @@ const AssignGroups = () => {
     },
     {
       title: 'Assign Preventive',
-      key: 'assignGroup',
+      key: 'assignPreventive',
       render: (text, record) => (
         <Space size="middle">
           <Select
@@ -425,7 +398,7 @@ const AssignGroups = () => {
             style={{ width: '150px' }}
             placeholder="Select groups"
             value={preventiveGroups[record._id]}
-            onChange={(selectedValues) => setPreventiveGroups({ ...selectedGroups, [record._id]: selectedValues })}
+            onChange={(selectedValues) => setPreventiveGroups({ ...preventiveGroups, [record._id]: selectedValues })}
           >
             {groups.filter((item) => item.sites.length != 1).map((group) => (
               <Option key={group._id} value={group._id}>
@@ -434,13 +407,13 @@ const AssignGroups = () => {
             ))}
           </Select>
 
-          <Button onClick={() => assignPreventive(record, true)}>Go</Button>
+          <Button onClick={() => assignPreventive(record)}>Go</Button>
         </Space>
       ),
     },
     {
       title: 'Assign Single Site',
-      key: 'assignGroup',
+      key: 'assignSingleSite',
       render: (text, record) => (
         <Space size="middle">
           <Select
@@ -448,11 +421,10 @@ const AssignGroups = () => {
             style={{ width: '150px' }}
             placeholder="Select groups"
             value={singleSite[record._id]}
-            onChange={(selectedValues) => setSingleSite({ ...selectedGroups, [record._id]: selectedValues })}
+            onChange={(selectedValues) => setSingleSite({ ...singleSite, [record._id]: selectedValues })}
           >
             {groups.filter((item) => item.sites.length == 1).map((group) => (
               <Option key={group._id} value={group._id}>
-                {console.log("GROUPD", group)}
                 {group.groupName}
               </Option>
             ))}
@@ -484,15 +456,19 @@ const AssignGroups = () => {
           </Heading>
         </CardHeader>
         <CardBody>
-          <Table
-            dataSource={users}
-            columns={columns}
-            pagination={{
-              pageSize: 10,
-              current: currentPage,
-              onChange: (page) => setCurrentPage(page),
-            }}
-          />
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <Table
+              dataSource={users}
+              columns={columns}
+              pagination={{
+                pageSize: 10,
+                current: currentPage,
+                onChange: (page) => setCurrentPage(page),
+              }}
+            />
+          )}
         </CardBody>
       </Card>
     </>

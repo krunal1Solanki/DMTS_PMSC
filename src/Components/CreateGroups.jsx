@@ -33,7 +33,7 @@ import {
     Text,
     Select, // Added Select component
 } from '@chakra-ui/react';
-import Loader from "./LOader";
+import Loader from "./Loader";
 
 const CreateGroups = () => {
     const [targetKeys, setTargetKeys] = useState([]);
@@ -260,7 +260,7 @@ const CreateGroups = () => {
         setGetSitesLOader(true);
       
         try {
-          const apiUrl = '/api/sites/getAllSites';
+          const apiUrl = '/api/sites/getActiveSites';
           const response = await fetch(apiUrl, {
              headers: {
           "Content-Type": "application/json",
@@ -274,7 +274,7 @@ const CreateGroups = () => {
           }
       
           const responseData = await response.json();
-          setSites(responseData.message);
+          setSites(responseData.sites);
           setGetSitesLOader(false);
         } catch (error) {
           console.error('Error fetching sites:', error.message);

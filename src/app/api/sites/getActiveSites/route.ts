@@ -1,14 +1,18 @@
 import siteMaster from "@/models/siteMaster.js";
 import {connect} from "../../../../dbConfig/dbConfig.js"
 import {NextRequest, NextResponse} from "next/server"
+import UserProjectLink from "@/models/userProjectLink.js";
+import getDataFromToken from "@/helpers/getDataFromToken";
+import getAssignedSites from "@/helpers/getAssignedSites";
+
 
 connect()
 
 ;
 export async function GET (request : NextRequest) {
     try {
-        const sites = await siteMaster.find({isDMTSActive : true});
-        console.log("LLL",sites.length)
+        let sites = await getAssignedSites(request);
+        sites = sites.filter((item : any) => item.isDMTSActive == true);
         return NextResponse.json({
             sites
         });

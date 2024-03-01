@@ -16,7 +16,7 @@ import {
     Button,
     useToast
 } from '@chakra-ui/react';
-import Loader from './LOader';
+import Loader from './Loader';
 
 const ActiveSite = () => {
     const [sites, setSites] = useState([]);
@@ -45,6 +45,7 @@ const ActiveSite = () => {
           }
       
           const responseData = await response.json();
+          console.log("RESSSSSSSS", responseData)
           setSites(responseData.message);
         } catch (error) {
           console.error('Error fetching sites:', error);
