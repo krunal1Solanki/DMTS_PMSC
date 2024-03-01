@@ -18,11 +18,12 @@ export function middleware(request: NextRequest) {
 const isTokenExpired = (token : any) => {
   try {
     const decodedToken = jwt.decode(token);
+    //@ts-ignore
     return decodedToken && decodedToken.exp * 1000 < Date.now();
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error decoding token:', error.message);
     return true; // Consider token expired on decoding error
-  }
+}
 };
 
 export const config = {

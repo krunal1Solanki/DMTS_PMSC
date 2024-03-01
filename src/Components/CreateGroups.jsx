@@ -33,7 +33,7 @@ import {
     Text,
     Select, // Added Select component
 } from '@chakra-ui/react';
-import Loader from "./LOader";
+import Loader from "./Loader";
 
 const CreateGroups = () => {
     const [targetKeys, setTargetKeys] = useState([]);

@@ -16,7 +16,7 @@ import {
     Button,
     useToast
 } from '@chakra-ui/react';
-import Loader from './LOader';
+import Loader from './Loader';
 
 const ActiveSite = () => {
     const [sites, setSites] = useState([]);

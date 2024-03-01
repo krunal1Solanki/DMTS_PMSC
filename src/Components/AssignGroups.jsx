@@ -5,7 +5,7 @@ import { useToast } from '@chakra-ui/react';
 import { Select, Modal } from 'antd';
 import { DeleteFilled } from '@ant-design/icons';
 import { Table, Space } from 'antd';
-import Loader from "./LOader";
+import Loader from "./Loader";
 import { useDispatch } from 'react-redux';
 const { Option } = Select;
 
