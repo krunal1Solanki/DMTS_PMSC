@@ -54,7 +54,7 @@ export async function POST(request: NextRequest,) {
             MobileNo : user.MobileNo,
             Password : user.Password,
             pmscUserData : user.pmscUserData,
-            notificationToken : notificationToken ? notificationToken : ""
+            notificationToken : notificationToken
         };
         
         console.log("BEFORE", newUser)
