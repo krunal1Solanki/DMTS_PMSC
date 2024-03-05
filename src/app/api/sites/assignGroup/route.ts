@@ -4,6 +4,7 @@ import {NextRequest, NextResponse} from "next/server"
 import userSiteHistoryModel from '@/models/userSiteHistoryModel.js'
 import getDataFromToken from "@/helpers/getDataFromToken";
 import sendNotfication from "@/helpers/sendNotification";
+import notificationModel from "@/models/notificationModel.js";
 
 connect()
 
@@ -39,8 +40,15 @@ export async function POST (request : NextRequest) {
             })
         }
 
+        const title = "Group Assigned !";
+        const bodyNot = "New group has been assigned please check.";
 
-        await sendNotfication(user.notificationToken, "Group Assigned !", 'New group has been assigned please check.')
+        await sendNotfication(user.notificationToken, title, bodyNot);
+        await notificationModel.create({
+            userId,
+            title,
+            body : bodyNot
+        })
         return NextResponse.json({
           message: "Groups has been successfully assigned !"
         });

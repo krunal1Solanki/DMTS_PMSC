@@ -5,6 +5,7 @@ import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname } from 'path';
 import { readFile } from "fs";
 import userModel from "@/models/userModel";
+import notificationModel from '@/models/notificationModel'
 import sendNotification from "@/helpers/sendNotification";
 
 connect();
@@ -65,7 +66,16 @@ export async function POST(request: NextRequest) {
             OperatorName : selectedUser,
         })
 
-        await sendNotification(user.notificationToken, "Query Found !", "Query has been assinged to you please check!")
+
+        console.log("THISS uis my uswess",user);
+        const title = "Query Found !";
+        const bodyNot = "Query has been assinged to you please check!";
+        await sendNotification(user.notificationToken, title, bodyNot); 
+        await notificationModel.create({
+            title,
+            body : bodyNot,
+            userId : user._id
+        })
 
         console.log(body);
         return NextResponse.json({

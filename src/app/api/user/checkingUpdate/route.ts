@@ -39,8 +39,6 @@ export async function POST(request: NextRequest, params: any) {
             })
         }
         
-
-
         return NextResponse.json({
             message: "Checking Status Updated Successfully"
         })
