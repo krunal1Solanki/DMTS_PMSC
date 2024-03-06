@@ -8,6 +8,8 @@ const schema = new Schema({
         default : 'question'
     },
     userId : mongoose.Types.ObjectId,
+    siteId : mongoose.Types.ObjectId,
+    siteName : String,
     userName : String,
     isApproved : Boolean,
     formType: {

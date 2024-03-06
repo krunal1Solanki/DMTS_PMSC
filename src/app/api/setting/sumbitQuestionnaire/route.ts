@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
 
-        const { type, userId, userName, formType, questionnaireName, questions, images } = body;
+        const { type, userId, userName, formType, questionnaireName, questions, images, siteId, siteName } = body;
         console.log(type, userId, userName, formType, questionnaireName, questions);
 
         if (images && images.length > 0) {
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         }
         
         const info = new questionnaireMaster({
-            type, userId, userName, formType, questionnaireName, questions, images
+            type, userId, userName, formType, questionnaireName, questions, images, siteId, siteName
     });
 
         await info.save();
