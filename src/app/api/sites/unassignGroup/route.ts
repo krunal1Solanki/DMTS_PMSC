@@ -14,7 +14,7 @@ export async function POST (request : NextRequest) {
             { _id: new mongoose.Types.ObjectId(userId) },
             { $pull: { assignedGroups: { groupId: groupId } } }
           );
-      
+        
         return NextResponse.json({
           message: "OK"
         });

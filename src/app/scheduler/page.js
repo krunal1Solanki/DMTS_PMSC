@@ -4,6 +4,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { Chart } from 'chart.js/auto';
 import { registerables } from 'chart.js';
 import { useEffect, useState } from 'react';
+import UserSummaryReport from '../../Components/UserSummaryReport'
 import axios from 'axios';
 Chart.register(...registerables);
 
@@ -138,6 +139,9 @@ const Scheduler = () => {
           <Doughnut data={dataQuestionnaire} />
         </Card>
       </Flex>
+      <Box>
+        <UserSummaryReport/>
+      </Box>
     </Box>
   );
 };
