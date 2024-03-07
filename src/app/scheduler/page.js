@@ -1,11 +1,13 @@
 "use client"
 import { Box, Flex, Heading, SimpleGrid, Card, CardBody, CardHeader, Select } from '@chakra-ui/react';
 import { Doughnut } from 'react-chartjs-2';
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import { Chart } from 'chart.js/auto';
 import { registerables } from 'chart.js';
 import { useEffect, useState } from 'react';
 import UserSummaryReport from '../../Components/UserSummaryReport'
 import axios from 'axios';
+import AttendanceReport from '../../Components/AttendanceReport';
 Chart.register(...registerables);
 
 const Scheduler = () => {
@@ -139,9 +141,24 @@ const Scheduler = () => {
           <Doughnut data={dataQuestionnaire} />
         </Card>
       </Flex>
-      <Box>
-        <UserSummaryReport/>
-      </Box>
+      <Tabs variant='soft-rounded' colorScheme='teal' mt={10}>
+      <TabList mb="1em">
+        <Tab>User Summary Report</Tab>
+        <Tab>Attendance Report</Tab>
+      </TabList>
+      <TabPanels>
+        <TabPanel>
+          <Box p="6">
+            <UserSummaryReport />
+          </Box>
+        </TabPanel>
+        <TabPanel>
+          <Box p="6">
+            <AttendanceReport />
+          </Box>
+        </TabPanel>
+      </TabPanels>
+    </Tabs>
     </Box>
   );
 };
