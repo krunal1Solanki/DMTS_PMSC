@@ -1,4 +1,4 @@
-const { mongoose } = require('mongoose')
+const  mongoose  = require('mongoose')
 const Schema = mongoose.Schema
   
 const schema = new Schema({
@@ -21,9 +21,28 @@ const schema = new Schema({
         type: String,
         default: 2, // 1 - Admin, 2 - User
     },
-    assignedGroups : {
-        type : Array,
-    },
+    assignedGroups: [{
+        groupId: {
+            type: String,
+            required: false,
+        },
+        groupName: {
+            type: String,
+            required: false,
+        },
+        isPreventive: {
+            type: Boolean,
+            required: false,
+        },
+        createAt: {
+            type: Date,
+            required: false,
+        },
+        status: {
+            type: String,
+            required: false,
+        },
+    }],
     emergencyGroup : Object,
     EmploymentType: {
         type: String,
