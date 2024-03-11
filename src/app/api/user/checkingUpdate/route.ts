@@ -8,44 +8,44 @@ connect();
 export async function POST(request: NextRequest, params: any) {
     try {
         const body = await request.json();
-        const {userId : _id, latitude, longitude, checkingStatus} = body;
+        const { userId: _id, latitude, longitude, checkingStatus } = body;
 
-        const user  = await userModel.findOne({_id});
+        const user = await userModel.findOne({ _id });
 
-        if(!user) {
+        if (!user) {
             NextResponse.json({
-                message : "User not found!"
+                message: "User not found!"
             })
         }
         console.log("checking Status", checkingStatus)
-        
 
-        if(checkingStatus == "checkedIn") {
+
+        if (checkingStatus == "checkedIn") {
             user.checkingStatus = "checkedOut";
-            const latestCheckin = await checkingStatusModel.find({userId : _id, checkingStatus : "checkedIn"}).sort({creationDate : -1}).limit(1);
+            const latestCheckin = await checkingStatusModel.find({ userId: _id, checkingStatus: "checkedIn" }).sort({ creationDate: -1 }).limit(1);
 
             const distance = user.distanceTravelled || 0;
 
-            const newDistance : any = calculateDistance(latitude, longitude, latestCheckin[0].latitude, latestCheckin[0].longitude) + distance;
+            const newDistance: any = calculateDistance(latitude, longitude, latestCheckin[0].latitude, latestCheckin[0].longitude) + distance;
             user.set(`distanceTravelled`, newDistance);
             await user.save();
             await checkingStatusModel.create({
-                checkingStatus : "checkedOut",
+                checkingStatus: "checkedOut",
                 latitude,
                 longitude,
-                userId : _id    
+                userId: _id
             })
         } else {
             user.checkingStatus = "checkedIn";
             await user.save();
             await checkingStatusModel.create({
-                checkingStatus : "checkedIn",
+                checkingStatus: "checkedIn",
                 latitude,
                 longitude,
-                userId : _id    
+                userId: _id
             })
         }
-        
+
         return NextResponse.json({
             message: "Checking Status Updated Successfully"
         })
