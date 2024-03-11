@@ -1,5 +1,5 @@
 "use client"
-import { Box, Flex, Heading, SimpleGrid, Card, CardBody, CardHeader, Select } from '@chakra-ui/react';
+import { Box, Flex, Heading, SimpleGrid, Card, CardBody, CardHeader, Select, Divider } from '@chakra-ui/react';
 import { Doughnut } from 'react-chartjs-2';
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
 import { Chart } from 'chart.js/auto';
@@ -141,6 +141,7 @@ const Scheduler = () => {
           <Doughnut data={dataQuestionnaire} />
         </Card>
       </Flex>
+      <Divider/>
       <Tabs variant='soft-rounded' colorScheme='teal' mt={10}>
       <TabList mb="1em">
         <Tab>User Summary Report</Tab>

@@ -2,6 +2,7 @@ import userModel from "@/models/userModel";
 import checkingStatusModel from "@/models/checkingStatusModel"
 import { connect } from "../../../../dbConfig/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
+import calculateDistance from '../../../../helpers/calculateDistance.js'
 connect();
 
 export async function POST(request: NextRequest, params: any) {
@@ -21,6 +22,12 @@ export async function POST(request: NextRequest, params: any) {
 
         if(checkingStatus == "checkedIn") {
             user.checkingStatus = "checkedOut";
+            const latestCheckin = await checkingStatusModel.find({userId : _id, checkingStatus : "checkedIn"}).sort({creationDate : -1}).limit(1);
+
+            const distance = user.distanceTravelled || 0;
+
+            const newDistance = calculateDistance(latitude, longitude, latestCheckin[0].latitude, latestCheckin[0].longitude) + distance;
+            user.set(`distanceTravelled`, newDistance);
             await user.save();
             await checkingStatusModel.create({
                 checkingStatus : "checkedOut",

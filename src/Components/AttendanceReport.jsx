@@ -1,15 +1,16 @@
 "use client"
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Table, Thead, Tbody, Tr, Th, Td, Badge, Heading } from '@chakra-ui/react';
+import { Table, Thead, Tbody, Tr, Th, Td, Badge, Heading, Box, Select, Divider } from '@chakra-ui/react';
 
 const AttendanceReport = () => {
     const [attendanceData, setAttendanceData] = useState([]);
     const [users, setUsers] = useState([]);
+    const [selectedOperator, setSelectedOperator] = useState(null);
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [selectedOperator]);
 
     const fetchData = async () => {
         try {
@@ -36,10 +37,30 @@ const AttendanceReport = () => {
         return organizedData;
     };
 
+    const handleOperatorChange = (event) => {
+        setSelectedOperator(event.target.value);
+    };
+
     return (
         <div>
             <Heading as="h2" size="lg" mb={4}>Attendance Report</Heading>
-            <Table variant="simple">
+            <Box mb={4}>
+                    <Select
+                    w={'20%'}
+                        bg="teal.500"
+                        borderColor="teal.500"
+                        value={selectedOperator}
+                        onChange={handleOperatorChange}
+                        placeholder="Select an operator"
+                    >
+                        <option value="">All Operators</option>
+                        {users.map(user => (
+                            <option key={user._id} value={user.OperatorName}>{user.OperatorName}</option>
+                        ))}
+                    </Select>
+            </Box>
+            <Divider/>
+            <Table mt={5} variant="striped">
                 <Thead>
                     <Tr>
                         <Th>Date</Th>
@@ -53,23 +74,28 @@ const AttendanceReport = () => {
                     {Object.entries(attendanceData).map(([date, entries]) => (
                         <React.Fragment key={date}>
                             {users.map(user => (
+                                (!selectedOperator || user.OperatorName === selectedOperator) && // Apply filter
                                 <Tr key={`${date}-${user._id}`}>
                                     <Td>{date}</Td>
                                     <Td>{user.OperatorName}</Td>
                                     <Td>
-                                        {entries.find(entry => entry.userId === user._id && entry.checkingStatus === 'checkedIn') ?
-                                            new Date(entries.find(entry => entry.userId === user._id && entry.checkingStatus === 'checkedIn').creationDate).toLocaleTimeString() :
-                                            '-'
-                                        }
+                                        {entries.filter(entry => entry.userId === user._id && entry.checkingStatus === 'checkedIn').map((checkin, index, array) => (
+                                            <React.Fragment key={checkin._id}>
+                                                {new Date(checkin.creationDate).toLocaleTimeString()}
+                                                {index < array.length - 1 && ', '}
+                                            </React.Fragment>
+                                        ))}
                                     </Td>
                                     <Td>
-                                        {entries.find(entry => entry.userId === user._id && entry.checkingStatus === 'checkedOut') ?
-                                            new Date(entries.find(entry => entry.userId === user._id && entry.checkingStatus === 'checkedOut').creationDate).toLocaleTimeString() :
-                                            '-'
-                                        }
+                                        {entries.filter(entry => entry.userId === user._id && entry.checkingStatus === 'checkedOut').map((checkout, index, array) => (
+                                            <React.Fragment key={checkout._id}>
+                                                {new Date(checkout.creationDate).toLocaleTimeString()}
+                                                {index < array.length - 1 && ', '}
+                                            </React.Fragment>
+                                        ))}
                                     </Td>
                                     <Td>
-                                        {entries.find(entry => entry.userId === user._id) ? 
+                                        {entries.find(entry => entry.userId === user._id) ?
                                             <Badge colorScheme="green">Present</Badge> :
                                             <Badge colorScheme="red">Absent</Badge>
                                         }

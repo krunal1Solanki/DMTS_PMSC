@@ -16,7 +16,7 @@ const schema = new Schema({
     userType: {
         type: Number
     },
-
+    distanceTravelled : Number,
     Designation: {
         type: String,
         default: 2, // 1 - Admin, 2 - User

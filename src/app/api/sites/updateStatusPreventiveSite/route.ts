@@ -21,10 +21,8 @@ export async function POST(request: NextRequest, params : any) {
         console.log('user', user[0].assignedGroups)
 
         for(let i = 0; i < user[0].assignedGroups.length; i ++) {
-            console.log(i, "HITHERE", user[0].assignedGroups[i])
             if(user[0].assignedGroups[i].groupName == groupName) {
                 user[0].set(`assignedGroups.${i}.status`, 'completed');
-                console.log("AFTER", user[0].assignedGroups)
             }
         }
 
