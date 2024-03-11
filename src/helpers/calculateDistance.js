@@ -1,21 +1,28 @@
-function calculateDistance(lat1, lon1, lat2, lon2) {
-    console.log(lat1, lat2, lon1, lon2)
-    const toRadians = (degrees) => degrees * (Math.PI / 180);
+const { Client } = require('@googlemaps/google-maps-services-js');
 
-    const R = 6371; // Earth radius in kilometers
-    const dLat = toRadians(lat2 - lat1);
-    const dLon = toRadians(lon2 - lon1);
+const client = new Client({});
+const apiKey = 'AIzaSyC_mmyHAnkTF9dUjcTngzxG9eHfS3oMbfM';
 
-    const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+async function calculateDistance(lat1, lon1, lat2, lon2) {
+    try {
+        const response = await client.distancematrix({
+            params: {
+                origins: [{ lat: lat1, lng: lon1 }],
+                destinations: [{ lat: lat2, lng: lon2 }],
+                mode: 'driving',
+                units: 'metric',
+                key: apiKey,
+            },
+        });
 
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = R * c; // Distance in kilometers
-
-    return distance;
+        const distance = response.data.rows[0].elements[0].distance.text;
+        const distanceInMeters = parseFloat(distance.replace(' m', ''));
+        console.log(distance, distanceInMeters)
+        return distanceInMeters;
+    } catch (error) {
+        console.error(error.message);
+        throw error; // rethrow the error to handle it outside of the function
+    }
 }
 
-
-export default calculateDistance
+export default calculateDistance;
