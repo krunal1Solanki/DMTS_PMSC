@@ -26,7 +26,7 @@ export async function POST(request: NextRequest, params: any) {
 
             const distance = user.distanceTravelled || 0;
 
-            const newDistance = calculateDistance(latitude, longitude, latestCheckin[0].latitude, latestCheckin[0].longitude) + distance;
+            const newDistance : any = calculateDistance(latitude, longitude, latestCheckin[0].latitude, latestCheckin[0].longitude) + distance;
             user.set(`distanceTravelled`, newDistance);
             await user.save();
             await checkingStatusModel.create({
