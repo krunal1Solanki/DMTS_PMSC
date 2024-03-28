@@ -36,6 +36,9 @@ const schema = new Schema(
     attachments: {
       type: String, // Assuming you store file paths or URLs
     },
+    afterAttachments : {
+      type : String,
+    },
     queryStatus: {
       type: String,
       enum: ['pending', 'resolved', 'hold'],

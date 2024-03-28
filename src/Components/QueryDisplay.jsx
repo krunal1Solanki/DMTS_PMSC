@@ -16,14 +16,18 @@ import {
   CardBody,
   CardHeader,
   Heading,
+  Stack,
+  Input,
   Button,
   useToast,
   Flex,
   Box,
 } from '@chakra-ui/react';
 
-import { BsEye, BsDownload, BsX } from 'react-icons/bs';
+import { BsEye, BsDownload, BsX,  } from 'react-icons/bs';
+import {FaFile} from 'react-icons/fa'
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Textarea } from '@chakra-ui/react';
+import { Divider } from 'antd';
 
 
 const getStatusBadge = (status) => {
@@ -50,6 +54,8 @@ const QueryDisplay = () => {
   const toast = useToast();
   const [remarks, setRemarks] = useState('');
   const [isRemarksModalOpen, setIsRemarksModalOpen] = useState(false);
+  const [afterAttachments, setAfterAttachments] = useState([]);
+
 
   useEffect(() => {
     getAllQueries();
@@ -69,17 +75,17 @@ const QueryDisplay = () => {
     try {
       const apiUrl = '/api/setting/getQuery';
       const response = await fetch(apiUrl, {
-         headers: {
+        headers: {
           "Content-Type": "application/json",
           "Cache-Control": "no-cache",
         },
 
       });
-    
+
       if (!response.ok) {
         throw new Error(`Failed to fetch queries: ${response.status} - ${response.statusText}`);
       }
-    
+
       const responseData = await response.json();
       const modifiedQueries = responseData.info.map((query) => ({
         ...query,
@@ -98,7 +104,7 @@ const QueryDisplay = () => {
         isClosable: true,
       });
     }
-    
+
   };
 
   const handleSelectChange = (index, newStatus) => {
@@ -111,86 +117,75 @@ const QueryDisplay = () => {
 
   const handleQueryStatusSubmit = async (id, newStatus) => {
     setId(id);
-  
-  if (newStatus === 'resolved' && remarks.length == 0) {
-    // Open modal for entering remarks
-    setIsRemarksModalOpen(true);
-  } else {
-    try {
 
-      const apiUrl = '/api/setting/updateQueryStatus';
-      const requestData = {
-        _id: id,
-        queryStatus: newStatus,
-      };
-    
-      if (remarks && remarks.length > 0) {
-        requestData.remarks = remarks;
-      }
-    
+    if (newStatus === 'resolved' && remarks.length == 0) {
+      // Open modal for entering remarks
+      setIsRemarksModalOpen(true);
+    } else {
       try {
-        await fetch(apiUrl, {
-          method: 'POST',
-           headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache",
-        },
 
-          body: JSON.stringify(requestData),
+        const apiUrl = '/api/setting/updateQueryStatus';
+        const formData = new FormData();;
+        formData.append("_id", id);
+        formData.append("queryStatus", newStatus);
+        formData.append("afterAttachments", afterAttachments);
+        formData.append("remarks", remarks);
+
+        try {
+          await axios.post(apiUrl, formData)
+        } catch (error) {
+          console.error('Error updating query status:', error.message);
+          // Handle error as needed
+        }
+
+        toast({
+          title: 'Submit Successful',
+          description: `Query status updated successfully for query with ID ${id}`,
+          status: 'success',
+          position: 'top-right',
+          duration: 3000,
+          isClosable: true,
         });
+
+        const updatedQueries = [...queries];
+        updatedQueries.find((query) => query._id === id).isModified = false;
+        setQueries(updatedQueries);
+        setUnsavedChanges(false);
       } catch (error) {
-        console.error('Error updating query status:', error.message);
-        // Handle error as needed
+        console.error('Error updating query status:', error);
+
+        toast({
+          title: 'Submit Error',
+          description: `An error occurred while updating query status for query with ID ${id}`,
+          status: 'error',
+          position: 'top-right',
+          duration: 3000,
+          isClosable: true,
+        });
+      } finally {
+        setRemarks('');
+        closeRemarksModal()
       }
-
-      toast({
-        title: 'Submit Successful',
-        description: `Query status updated successfully for query with ID ${id}`,
-        status: 'success',
-        position: 'top-right',
-        duration: 3000,
-        isClosable: true,
-      });
-
-      const updatedQueries = [...queries];
-      updatedQueries.find((query) => query._id === id).isModified = false;
-      setQueries(updatedQueries);
-      setUnsavedChanges(false);
-    } catch (error) {
-      console.error('Error updating query status:', error);
-
-      toast({
-        title: 'Submit Error',
-        description: `An error occurred while updating query status for query with ID ${id}`,
-        status: 'error',
-        position: 'top-right',
-        duration: 3000,
-        isClosable: true,
-      });
-    } finally {
-      setRemarks('');
-      closeRemarksModal()
     }
-  }
-};
+  };
 
-const closeRemarksModal = () => {
-  setIsRemarksModalOpen(false);
-};
+  const closeRemarksModal = () => {
+    setIsRemarksModalOpen(false);
+  };
 
-// Function to handle submission of remarks
-const submitRemarks = async () => {
-  try {
-    // Add logic to handle remarks submission, e.g., sending to the server
-    console.log('Remarks submitted:', remarks);
+  // Function to handle submission of remarks
+  const submitRemarks = async () => {
+    try {
+      // Add logic to handle remarks submission, e.g., sending to the server
+      console.log('Remarks submitted:', remarks);
 
-    // Close the remarks modal
-    closeRemarksModal();
-  } catch (error) {
-    console.error('Error submitting remarks:', error);
-    // Handle error, show toast, etc.
-  }
-};
+      // Close the remarks modal
+      closeRemarksModal();
+    } catch (error) {
+      console.error('Error submitting remarks:', error);
+      // Handle error, show toast, etc.
+    }
+  };
 
 
   const handleFilterChange = (e) => {
@@ -288,13 +283,13 @@ const submitRemarks = async () => {
                     <Select
                       value={query.queryStatus}
                       onChange={(e) => handleSelectChange(index, e.target.value)}
-                    minW={'80px'}
+                      minW={'80px'}
                     >
-                      
+
                       <option value="pending">Pending</option>
                       <option value="resolved">Resolved</option>
                       <option value="hold">Hold</option>
-                      
+
                     </Select>
                   </Td>
                   <Td display={'flex'} alignItems={'center'} gap={'7px'}>
@@ -340,27 +335,35 @@ const submitRemarks = async () => {
           </ModalContent>
         </Modal>
         <Modal isOpen={isRemarksModalOpen} onClose={closeRemarksModal}>
-  <ModalOverlay />
-  <ModalContent>
-    <ModalHeader>{`Please enter remarks !`}</ModalHeader>
-    <ModalCloseButton />
-    <ModalBody>
-      {/* Textarea for entering remarks */}
-      <Textarea value={remarks} onChange={(e) => setRemarks(e.target.value)} />
-    </ModalBody>
-    {/* Action buttons in the modal */}
-    <Flex justifyContent="flex-end" p={4}>
-      <Button colorScheme="teal" isDisabled={remarks.length == 0} onClick={()=> {
-        handleQueryStatusSubmit(id, "resolved")
-      }}>
-        Submit Remarks
-      </Button>
-      <Button ml={2} onClick={closeRemarksModal}>
-        Cancel
-      </Button>
-    </Flex>
-  </ModalContent>
-</Modal>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>{`Please enter remarks !`}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Textarea value={remarks} onChange={(e) => setRemarks(e.target.value)} />
+              <Divider/>
+              <Stack direction="row" spacing={2} align="center">
+                <Input type="file" accept="image/*" onChange={(e) => setAfterAttachments(e.target.files[0])} />
+                <IconButton
+                  icon={<FaFile />}
+                  aria-label="View Attachments"
+                  onClick={() => { /* Add functionality to view attachments if needed */ }}
+                />
+              </Stack>
+            </ModalBody>
+            {/* Action buttons in the modal */}
+            <Flex justifyContent="flex-end" p={4}>
+              <Button colorScheme="teal" isDisabled={remarks.length == 0} onClick={() => {
+                handleQueryStatusSubmit(id, "resolved")
+              }}>
+                Submit Remarks
+              </Button>
+              <Button ml={2} onClick={closeRemarksModal}>
+                Cancel
+              </Button>
+            </Flex>
+          </ModalContent>
+        </Modal>
       </CardBody>
     </Card>
   );

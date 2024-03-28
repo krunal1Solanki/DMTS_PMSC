@@ -2,7 +2,7 @@ import { connect } from "../../../../dbConfig/dbConfig";
 import queryModel from '@/models/queryMaster';
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile, mkdir } from 'fs/promises';
-import { join, dirname } from 'path';
+import { join, dirname } from 'path';   
 import { readFile } from "fs";
 import userModel from "@/models/userModel";
 import notificationModel from '@/models/notificationModel'
